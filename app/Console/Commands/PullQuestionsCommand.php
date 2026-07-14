@@ -26,28 +26,31 @@ class PullQuestionsCommand extends Command
             $this->info("Fetching {$country->country_name}");
 
             $response = Http::acceptJson()
+                ->timeout(120)
+                ->retry(3, 3000, throw: false)
                 ->withHeaders([
                     'access-token' => trim(env('ACCESS_TOKEN')),
                 ])
                 ->get("https://stagingsupply.opinionest.com/api/v1/support/question/{$country->country_id}");
 
             if (
-                    $response->status() === 404 &&
-                    $response->json('message') === 'No active questions found'
-                ) {
+                $response->status() === 404 &&
+                $response->json('message') === 'No active questions found'
+            ) {
 
-                    $this->warn(
-                        "Skipped {$country->country_name} ({$country->localization_code}) - No active questions."
-                    );
-                    $skipped++;
-                    continue;
-                }
+                $this->warn(
+                    "Skipped {$country->country_name} ({$country->localization_code}) - No active questions."
+                );
+                $skipped++;
+
+                continue;
+            }
 
             $questions = $response->json('data');
 
             if (empty($questions)) {
                 $this->warn("No questions for {$country->country_name}");
-                
+
                 continue;
             }
 
@@ -56,6 +59,7 @@ class PullQuestionsCommand extends Command
                 Question::updateOrCreate(
                     [
                         'question_id' => $question['QuestionId'],
+                        'country_id' => $country->country_id,
                     ],
                     [
                         'description' => $question['Description'],
@@ -66,20 +70,20 @@ class PullQuestionsCommand extends Command
                 );
             }
 
-            $this->info(count($questions) . " questions saved.");
+            $this->info(count($questions).' questions saved.');
 
             $processed++;
         }
 
         $this->newLine();
 
-        $this->info("Questions imported successfully.");
+        $this->info('Questions imported successfully.');
 
         $this->info("Countries processed: {$processed}");
 
         $this->warn("Countries skipped (no active questions): {$skipped}");
 
-return Command::SUCCESS;
+        return Command::SUCCESS;
 
     }
 }

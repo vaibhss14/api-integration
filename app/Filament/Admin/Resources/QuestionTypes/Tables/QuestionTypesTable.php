@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\QuestionTypes\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -16,6 +17,7 @@ class QuestionTypesTable
             ->columns([
                 TextColumn::make('question_type_id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('question_type_name')
                     ->searchable(),
@@ -33,6 +35,7 @@ class QuestionTypesTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

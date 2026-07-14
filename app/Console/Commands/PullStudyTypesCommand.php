@@ -46,7 +46,7 @@ class PullStudyTypesCommand extends Command
             );
         }
 
-        $this->info(count($studyTypes) . ' study types imported successfully.');
+        $this->info(count($studyTypes).' study types imported successfully.');
 
         return Command::SUCCESS;
     }

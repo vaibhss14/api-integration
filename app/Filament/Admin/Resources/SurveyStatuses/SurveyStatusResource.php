@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\SurveyStatuses;
 
-use App\Filament\Admin\Resources\SurveyStatuses\Pages\CreateSurveyStatus;
 use App\Filament\Admin\Resources\SurveyStatuses\Pages\EditSurveyStatus;
 use App\Filament\Admin\Resources\SurveyStatuses\Pages\ListSurveyStatuses;
 use App\Filament\Admin\Resources\SurveyStatuses\Schemas\SurveyStatusForm;
@@ -18,7 +17,8 @@ class SurveyStatusResource extends Resource
 {
     protected static ?string $model = SurveyStatus::class;
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 6;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'status_name';
@@ -44,7 +44,6 @@ class SurveyStatusResource extends Resource
     {
         return [
             'index' => ListSurveyStatuses::route('/'),
-            'create' => CreateSurveyStatus::route('/create'),
             'edit' => EditSurveyStatus::route('/{record}/edit'),
         ];
     }

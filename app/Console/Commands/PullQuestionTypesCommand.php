@@ -46,7 +46,7 @@ class PullQuestionTypesCommand extends Command
             );
         }
 
-        $this->info(count($questionTypes) . ' question types imported successfully.');
+        $this->info(count($questionTypes).' question types imported successfully.');
 
         return Command::SUCCESS;
     }

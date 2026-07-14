@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Country;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
-use App\Models\Country;
 
 class PullCountriesCommand extends Command
 {
@@ -16,15 +16,16 @@ class PullCountriesCommand extends Command
     {
         $apiUrl = 'https://stagingsupply.opinionest.com/api/v1/support/country-list';
 
-       $response = Http::withHeaders([
-        'access-token' => env('ACCESS_TOKEN'),
-        'Accept' => 'application/json',
+        $response = Http::withHeaders([
+            'access-token' => env('ACCESS_TOKEN'),
+            'Accept' => 'application/json',
         ])->get($apiUrl);
 
         $countries = $response->json('data');
 
-        if (!$countries) {
+        if (! $countries) {
             $this->error('No country data found.');
+
             return Command::FAILURE;
         }
 

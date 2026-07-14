@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\BusinessVerticals;
 
-use App\Filament\Admin\Resources\BusinessVerticals\Pages\CreateBusinessVertical;
 use App\Filament\Admin\Resources\BusinessVerticals\Pages\EditBusinessVertical;
 use App\Filament\Admin\Resources\BusinessVerticals\Pages\ListBusinessVerticals;
 use App\Filament\Admin\Resources\BusinessVerticals\Schemas\BusinessVerticalForm;
@@ -18,7 +17,8 @@ class BusinessVerticalResource extends Resource
 {
     protected static ?string $model = BusinessVertical::class;
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 8;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'description';
@@ -44,7 +44,6 @@ class BusinessVerticalResource extends Resource
     {
         return [
             'index' => ListBusinessVerticals::route('/'),
-            'create' => CreateBusinessVertical::route('/create'),
             'edit' => EditBusinessVertical::route('/{record}/edit'),
         ];
     }

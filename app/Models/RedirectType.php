@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RedirectType extends Model
 {
-      protected $fillable = [
+    protected $fillable = [
         'redirect_type_id',
         'description',
     ];

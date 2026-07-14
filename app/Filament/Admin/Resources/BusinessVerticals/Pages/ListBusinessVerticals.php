@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\BusinessVerticals\Pages;
 
 use App\Filament\Admin\Resources\BusinessVerticals\BusinessVerticalResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListBusinessVerticals extends ListRecords
@@ -12,8 +11,6 @@ class ListBusinessVerticals extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        return [];
     }
 }

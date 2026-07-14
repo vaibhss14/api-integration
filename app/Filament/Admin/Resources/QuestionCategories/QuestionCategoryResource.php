@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\QuestionCategories;
 
-use App\Filament\Admin\Resources\QuestionCategories\Pages\CreateQuestionCategory;
 use App\Filament\Admin\Resources\QuestionCategories\Pages\EditQuestionCategory;
 use App\Filament\Admin\Resources\QuestionCategories\Pages\ListQuestionCategories;
 use App\Filament\Admin\Resources\QuestionCategories\Schemas\QuestionCategoryForm;
@@ -18,7 +17,8 @@ class QuestionCategoryResource extends Resource
 {
     protected static ?string $model = QuestionCategory::class;
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 10;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'category_name';
@@ -44,7 +44,6 @@ class QuestionCategoryResource extends Resource
     {
         return [
             'index' => ListQuestionCategories::route('/'),
-            'create' => CreateQuestionCategory::route('/create'),
             'edit' => EditQuestionCategory::route('/{record}/edit'),
         ];
     }

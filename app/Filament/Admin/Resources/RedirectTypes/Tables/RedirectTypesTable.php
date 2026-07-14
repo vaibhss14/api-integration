@@ -16,6 +16,7 @@ class RedirectTypesTable
             ->columns([
                 TextColumn::make('redirect_type_id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('description')
                     ->searchable(),

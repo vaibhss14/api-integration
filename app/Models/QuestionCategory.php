@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class QuestionCategory extends Model
 {
-   protected $fillable = [
+    protected $fillable = [
         'category_id',
         'category_name',
     ];

@@ -16,6 +16,7 @@ class BusinessVerticalsTable
             ->columns([
                 TextColumn::make('business_vertical_id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('description')
                     ->searchable(),

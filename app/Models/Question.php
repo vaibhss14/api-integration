@@ -8,9 +8,19 @@ class Question extends Model
 {
     protected $fillable = [
         'question_id',
+        'country_id',
         'description',
         'question_category_id',
         'question_type_id',
         'localization_code',
     ];
+
+    public function answers()
+    {
+        return $this->hasMany(
+            QuestionAnswer::class,
+            'question_id',
+            'question_id'
+        );
+    }
 }

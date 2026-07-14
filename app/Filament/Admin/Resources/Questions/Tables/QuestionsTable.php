@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Resources\Questions\Tables;
 
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
@@ -18,6 +19,7 @@ class QuestionsTable
 
                 TextColumn::make('question_id')
                     ->label('Question ID')
+                    ->searchable()
                     ->sortable(),
 
                 TextColumn::make('description')
@@ -27,13 +29,16 @@ class QuestionsTable
                     ->wrap(),
 
                 TextColumn::make('question_category_id')
-                    ->label('Category'),
+                    ->label('Category')
+                    ->searchable(),
 
                 TextColumn::make('question_type_id')
-                    ->label('Type'),
+                    ->label('Type')
+                    ->searchable(),
 
                 TextColumn::make('localization_code')
-                    ->label('Localization'),
+                    ->label('Localization')
+                    ->searchable(),
 
                 TextColumn::make('created_at')
                     ->dateTime(),
@@ -44,6 +49,7 @@ class QuestionsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

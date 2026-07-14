@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('questions', function (Blueprint $table) {
-             $table->id();
-
-            $table->bigInteger('question_id')->unique();
+            $table->id();
+            $table->bigInteger('question_id');
+            $table->integer('country_id');
             $table->text('description');
-            $table->integer('question_category_id');
+            $table->integer('question_category_id')->nullable();
             $table->integer('question_type_id')->nullable();
             $table->string('localization_code', 20);
 

@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\SurveyStatuses\Pages;
 
 use App\Filament\Admin\Resources\SurveyStatuses\SurveyStatusResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListSurveyStatuses extends ListRecords
@@ -12,8 +11,6 @@ class ListSurveyStatuses extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        return [];
     }
 }

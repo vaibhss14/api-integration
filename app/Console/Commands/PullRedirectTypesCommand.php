@@ -46,7 +46,7 @@ class PullRedirectTypesCommand extends Command
             );
         }
 
-        $this->info(count($redirectTypes) . ' redirect types imported successfully.');
+        $this->info(count($redirectTypes).' redirect types imported successfully.');
 
         return Command::SUCCESS;
     }

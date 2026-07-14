@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\RedirectTypes;
 
-use App\Filament\Admin\Resources\RedirectTypes\Pages\CreateRedirectType;
 use App\Filament\Admin\Resources\RedirectTypes\Pages\EditRedirectType;
 use App\Filament\Admin\Resources\RedirectTypes\Pages\ListRedirectTypes;
 use App\Filament\Admin\Resources\RedirectTypes\Schemas\RedirectTypeForm;
@@ -18,7 +17,8 @@ class RedirectTypeResource extends Resource
 {
     protected static ?string $model = RedirectType::class;
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 7;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'description';
@@ -44,7 +44,6 @@ class RedirectTypeResource extends Resource
     {
         return [
             'index' => ListRedirectTypes::route('/'),
-            'create' => CreateRedirectType::route('/create'),
             'edit' => EditRedirectType::route('/{record}/edit'),
         ];
     }

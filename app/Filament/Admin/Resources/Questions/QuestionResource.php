@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\Questions;
 
-use App\Filament\Admin\Resources\Questions\Pages\CreateQuestion;
 use App\Filament\Admin\Resources\Questions\Pages\EditQuestion;
 use App\Filament\Admin\Resources\Questions\Pages\ListQuestions;
 use App\Filament\Admin\Resources\Questions\Schemas\QuestionForm;
@@ -22,7 +21,8 @@ class QuestionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'description';
 
-     protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 11;
+
     public static function form(Schema $schema): Schema
     {
         return QuestionForm::configure($schema);
@@ -44,7 +44,6 @@ class QuestionResource extends Resource
     {
         return [
             'index' => ListQuestions::route('/'),
-            'create' => CreateQuestion::route('/create'),
             'edit' => EditQuestion::route('/{record}/edit'),
         ];
     }

@@ -16,6 +16,7 @@ class SurveyStatusesTable
             ->columns([
                 TextColumn::make('survey_status_id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('status_name')
                     ->searchable(),

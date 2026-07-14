@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\Industries;
 
-use App\Filament\Admin\Resources\Industries\Pages\CreateIndustry;
 use App\Filament\Admin\Resources\Industries\Pages\EditIndustry;
 use App\Filament\Admin\Resources\Industries\Pages\ListIndustries;
 use App\Filament\Admin\Resources\Industries\Schemas\IndustryForm;
@@ -17,11 +16,12 @@ use Filament\Tables\Table;
 class IndustryResource extends Resource
 {
     protected static ?string $model = Industry::class;
-    
-    protected static ?int $navigationSort = 2;
+
+    protected static ?int $navigationSort = 4;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Industry';
+    protected static ?string $recordTitleAttribute = 'industry_name';
 
     public static function form(Schema $schema): Schema
     {
@@ -44,7 +44,6 @@ class IndustryResource extends Resource
     {
         return [
             'index' => ListIndustries::route('/'),
-            'create' => CreateIndustry::route('/create'),
             'edit' => EditIndustry::route('/{record}/edit'),
         ];
     }

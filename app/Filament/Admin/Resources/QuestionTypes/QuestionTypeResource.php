@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\QuestionTypes;
 
-use App\Filament\Admin\Resources\QuestionTypes\Pages\CreateQuestionType;
 use App\Filament\Admin\Resources\QuestionTypes\Pages\EditQuestionType;
 use App\Filament\Admin\Resources\QuestionTypes\Pages\ListQuestionTypes;
 use App\Filament\Admin\Resources\QuestionTypes\Schemas\QuestionTypeForm;
@@ -18,7 +17,8 @@ class QuestionTypeResource extends Resource
 {
     protected static ?string $model = QuestionType::class;
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 9;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'question_type_name';
@@ -44,7 +44,6 @@ class QuestionTypeResource extends Resource
     {
         return [
             'index' => ListQuestionTypes::route('/'),
-            'create' => CreateQuestionType::route('/create'),
             'edit' => EditQuestionType::route('/{record}/edit'),
         ];
     }

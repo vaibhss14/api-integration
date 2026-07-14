@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\QuestionCategories\Pages;
 
 use App\Filament\Admin\Resources\QuestionCategories\QuestionCategoryResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListQuestionCategories extends ListRecords
@@ -12,8 +11,6 @@ class ListQuestionCategories extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        return [];
     }
 }

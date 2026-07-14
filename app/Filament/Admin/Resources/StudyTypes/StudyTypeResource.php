@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\StudyTypes;
 
-use App\Filament\Admin\Resources\StudyTypes\Pages\CreateStudyType;
 use App\Filament\Admin\Resources\StudyTypes\Pages\EditStudyType;
 use App\Filament\Admin\Resources\StudyTypes\Pages\ListStudyTypes;
 use App\Filament\Admin\Resources\StudyTypes\Schemas\StudyTypeForm;
@@ -18,7 +17,8 @@ class StudyTypeResource extends Resource
 {
     protected static ?string $model = StudyType::class;
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 5;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'study_name';
@@ -44,7 +44,6 @@ class StudyTypeResource extends Resource
     {
         return [
             'index' => ListStudyTypes::route('/'),
-            'create' => CreateStudyType::route('/create'),
             'edit' => EditStudyType::route('/{record}/edit'),
         ];
     }

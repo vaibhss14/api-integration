@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('country_id')->unique();
-            $table->string('localization_code',20);
-            $table->string('country_name',255);
-            $table->string('languages',255)->nullable();
+            $table->string('localization_code', 20);
+            $table->string('country_name', 255);
+            $table->string('languages', 255)->nullable();
             $table->timestamps();
         });
     }

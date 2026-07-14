@@ -46,7 +46,7 @@ class PullIndustriesCommand extends Command
             );
         }
 
-        $this->info(count($industries) . ' industries imported successfully.');
+        $this->info(count($industries).' industries imported successfully.');
 
         return Command::SUCCESS;
     }

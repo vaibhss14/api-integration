@@ -16,6 +16,7 @@ class CountriesTable
             ->columns([
                 TextColumn::make('country_id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('localization_code')
                     ->searchable(),

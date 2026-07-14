@@ -16,6 +16,7 @@ class StudyTypesTable
             ->columns([
                 TextColumn::make('study_type_id')
                     ->numeric()
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('study_name')
                     ->searchable(),

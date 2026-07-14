@@ -2,7 +2,6 @@
 
 namespace App\Filament\Admin\Resources\Countries;
 
-use App\Filament\Admin\Resources\Countries\Pages\CreateCountry;
 use App\Filament\Admin\Resources\Countries\Pages\EditCountry;
 use App\Filament\Admin\Resources\Countries\Pages\ListCountries;
 use App\Filament\Admin\Resources\Countries\Schemas\CountryForm;
@@ -18,7 +17,7 @@ class CountryResource extends Resource
 {
     protected static ?string $model = Country::class;
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 3;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
@@ -45,7 +44,6 @@ class CountryResource extends Resource
     {
         return [
             'index' => ListCountries::route('/'),
-            'create' => CreateCountry::route('/create'),
             'edit' => EditCountry::route('/{record}/edit'),
         ];
     }

@@ -46,7 +46,7 @@ class PullSurveyStatusesCommand extends Command
             );
         }
 
-        $this->info(count($surveyStatuses) . ' survey statuses imported successfully.');
+        $this->info(count($surveyStatuses).' survey statuses imported successfully.');
 
         return Command::SUCCESS;
     }

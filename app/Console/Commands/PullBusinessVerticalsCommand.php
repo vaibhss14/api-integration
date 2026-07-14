@@ -46,7 +46,7 @@ class PullBusinessVerticalsCommand extends Command
             );
         }
 
-        $this->info(count($businessVerticals) . ' business verticals imported successfully.');
+        $this->info(count($businessVerticals).' business verticals imported successfully.');
 
         return Command::SUCCESS;
     }

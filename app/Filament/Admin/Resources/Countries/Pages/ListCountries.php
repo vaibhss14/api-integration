@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources\Countries\Pages;
 
 use App\Filament\Admin\Resources\Countries\CountryResource;
-use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListCountries extends ListRecords
@@ -12,8 +11,6 @@ class ListCountries extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-            CreateAction::make(),
-        ];
+        return [];
     }
 }
