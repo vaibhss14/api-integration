@@ -18,7 +18,7 @@ class PullStudyTypesCommand extends Command
             ->withHeaders([
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
-            ->get('https://stagingsupply.opinionest.com/api/v1/support/study-types');
+            ->get(env('API_BASE_URL').'/study-types');
 
         if (! $response->successful()) {
             $this->error('Failed to fetch study types.');

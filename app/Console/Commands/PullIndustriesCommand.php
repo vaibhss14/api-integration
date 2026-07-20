@@ -18,7 +18,7 @@ class PullIndustriesCommand extends Command
             ->withHeaders([
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
-            ->get('https://stagingsupply.opinionest.com/api/v1/support/industry-list');
+            ->get(env('API_BASE_URL').'/industry-list');
 
         if (! $response->successful()) {
             $this->error('Failed to fetch industries.');

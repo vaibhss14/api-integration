@@ -35,7 +35,7 @@ class PullSurveyBlockedIpAddressesCommand extends Command
                         'access-token' => trim(env('ACCESS_TOKEN')),
                     ])
                     ->get(
-                        "https://stagingsupply.opinionest.com/api/v1/survey/survey-blocked-ip-address/{$survey->survey_id}"
+                        env('API_BASE_URL')."/survey/survey-blocked-ip-address/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {

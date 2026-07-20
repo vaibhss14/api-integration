@@ -24,7 +24,7 @@ class PullSupplierBlockedRespondentsCommand extends Command
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
             ->get(
-                'https://stagingsupply.opinionest.com/api/v1/supplier/supplier-blocked-respondents'
+                env('API_BASE_URL').'/supplier/supplier-blocked-respondents'
             );
 
         // Handle "No blocked supplier respondent found"

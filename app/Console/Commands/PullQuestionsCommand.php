@@ -31,7 +31,7 @@ class PullQuestionsCommand extends Command
                 ->withHeaders([
                     'access-token' => trim(env('ACCESS_TOKEN')),
                 ])
-                ->get("https://stagingsupply.opinionest.com/api/v1/support/question/{$country->country_id}");
+                ->get(env('API_BASE_URL')."/question/{$country->country_id}");
 
             if (
                 $response->status() === 404 &&

@@ -34,7 +34,7 @@ class PullQuestionAnswersCommand extends Command
                         'access-token' => trim(env('ACCESS_TOKEN')),
                     ])
                     ->get(
-                        "https://stagingsupply.opinionest.com/api/v1/support/question-answers/country/{$country->country_id}"
+                        env('API_BASE_URL')."/question-answers/country/{$country->country_id}"
                     );
 
             } catch (ConnectionException $e) {

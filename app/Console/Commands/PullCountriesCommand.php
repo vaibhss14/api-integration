@@ -14,12 +14,11 @@ class PullCountriesCommand extends Command
 
     public function handle()
     {
-        $apiUrl = 'https://stagingsupply.opinionest.com/api/v1/support/country-list';
 
         $response = Http::withHeaders([
             'access-token' => env('ACCESS_TOKEN'),
             'Accept' => 'application/json',
-        ])->get($apiUrl);
+        ])->get(env('API_BASE_URL').'/country-list');
 
         $countries = $response->json('data');
 

@@ -35,7 +35,7 @@ class PullGeneralRemainingCommand extends Command
                         'access-token' => trim(env('ACCESS_TOKEN')),
                     ])
                     ->get(
-                        "https://stagingsupply.opinionest.com/api/v1/survey/general-reserved-remaining/{$survey->survey_id}"
+                        env('API_BASE_URL')."/survey/general-reserved-remaining/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {

@@ -25,7 +25,7 @@ class PullSupplierBlockedIpAddressesCommand extends Command
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
             ->get(
-                'https://stagingsupply.opinionest.com/api/v1/supplier/supplier-blocked-ip-address'
+                env('API_BASE_URL').'/supplier/supplier-blocked-ip-address'
             );
 
         // Handle "No blocked supplier IP found"
