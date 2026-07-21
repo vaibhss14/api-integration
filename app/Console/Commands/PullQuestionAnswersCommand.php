@@ -34,7 +34,7 @@ class PullQuestionAnswersCommand extends Command
                         'access-token' => trim(env('ACCESS_TOKEN')),
                     ])
                     ->get(
-                        env('API_BASE_URL')."/question-answers/country/{$country->country_id}"
+                        env('API_BASE_URL')."/support/question-answers/country/{$country->country_id}"
                     );
 
             } catch (ConnectionException $e) {

@@ -18,7 +18,7 @@ class PullRedirectTypesCommand extends Command
             ->withHeaders([
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
-            ->get(env('API_BASE_URL').'/redirect-types');
+            ->get(env('API_BASE_URL').'/support/redirect-types');
 
         if (! $response->successful()) {
             $this->error('Failed to fetch redirect types.');

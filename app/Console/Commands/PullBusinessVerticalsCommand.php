@@ -18,7 +18,7 @@ class PullBusinessVerticalsCommand extends Command
             ->withHeaders([
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
-            ->get(env('API_BASE_URL').'/business-verticals');
+            ->get(env('API_BASE_URL').'/support/business-verticals');
 
         if (! $response->successful()) {
             $this->error('Failed to fetch business verticals.');

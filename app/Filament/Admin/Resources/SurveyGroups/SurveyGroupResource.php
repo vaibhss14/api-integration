@@ -17,7 +17,7 @@ class SurveyGroupResource extends Resource
 {
     protected static ?string $model = SurveyGroup::class;
 
-    protected static ?int $navigationSort = 16;
+    protected static ?int $navigationSort = 17;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

@@ -61,24 +61,38 @@ class PullSurveyQualificationsCommand extends Command
 
             $qualifications = $response->json('surveyQualifications');
 
+            if (empty($qualifications)) {
+                continue;
+            }
+
             foreach ($qualifications as $qualification) {
+
+                if (empty($qualification['answerIds'])) {
+                    continue;
+                }
 
                 foreach ($qualification['answerIds'] as $answerId) {
 
-                    SurveyQualification::updateOrCreate(
+                    // Handle comma-separated values returned as one string
+                    $answerIds = str_contains($answerId, ',')
+                        ? explode(',', $answerId)
+                        : [$answerId];
 
-                        [
-                            'survey_id' => $survey->survey_id,
-                            'qualification_id' => $qualification['qualificationId'],
-                            'answer_id' => $answerId,
-                        ],
+                    foreach ($answerIds as $id) {
 
-                        [
-                            'update_timestamp' => ! empty($qualification['updateTimeStamp'])
+                        SurveyQualification::updateOrCreate(
+                            [
+                                'survey_id' => $survey->survey_id,
+                                'qualification_id' => $qualification['qualificationId'],
+                                'answer_id' => trim($id),
+                            ],
+                            [
+                                'update_timestamp' => ! empty($qualification['updateTimeStamp'])
                                     ? Carbon::parse($qualification['updateTimeStamp'])
                                     : null,
-                        ]
-                    );
+                            ]
+                        );
+                    }
                 }
             }
 

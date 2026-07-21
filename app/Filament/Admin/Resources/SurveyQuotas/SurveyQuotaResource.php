@@ -21,7 +21,7 @@ class SurveyQuotaResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'quota_name';
 
-    protected static ?int $navigationSort = 15;
+    protected static ?int $navigationSort = 16;
 
     public static function form(Schema $schema): Schema
     {

@@ -17,7 +17,7 @@ class SurveyBlockedIpAddressResource extends Resource
 {
     protected static ?string $model = SurveyBlockedIpAddress::class;
 
-    protected static ?int $navigationSort = 17;
+    protected static ?int $navigationSort = 18;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

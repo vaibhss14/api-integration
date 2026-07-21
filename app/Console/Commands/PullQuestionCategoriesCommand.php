@@ -18,7 +18,7 @@ class PullQuestionCategoriesCommand extends Command
             ->withHeaders([
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
-            ->get(env('API_BASE_URL').'/question-categories');
+            ->get(env('API_BASE_URL').'/support/question-categories');
 
         if (! $response->successful()) {
             $this->error('Failed to fetch question categories.');

@@ -17,7 +17,7 @@ class GeneralRemainingResource extends Resource
 {
     protected static ?string $model = GeneralRemaining::class;
 
-    protected static ?int $navigationSort = 18;
+    protected static ?int $navigationSort = 19;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

@@ -18,6 +18,8 @@ Schedule::command('survey-statuses:pull')->daily();
 
 Schedule::command('redirect-types:pull')->daily();
 
+Schedule::command('return-statuses:pull')->daily();
+
 Schedule::command('business-verticals:pull')->daily();
 
 Schedule::command('question-types:pull')->daily();
@@ -42,4 +44,4 @@ Schedule::command('supplier-blocked-ip-addresses:pull')->daily();
 
 Schedule::command('supplier-blocked-respondents:pull')->daily();
 
-Schedule::command('general-remainings:pull')->daily();
+Schedule::command('general-remaining:pull')->daily();

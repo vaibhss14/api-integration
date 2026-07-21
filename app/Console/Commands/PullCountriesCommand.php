@@ -18,7 +18,7 @@ class PullCountriesCommand extends Command
         $response = Http::withHeaders([
             'access-token' => env('ACCESS_TOKEN'),
             'Accept' => 'application/json',
-        ])->get(env('API_BASE_URL').'/country-list');
+        ])->get(env('API_BASE_URL').'/support/country-list');
 
         $countries = $response->json('data');
 

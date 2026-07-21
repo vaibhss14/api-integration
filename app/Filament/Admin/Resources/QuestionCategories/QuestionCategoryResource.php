@@ -17,7 +17,7 @@ class QuestionCategoryResource extends Resource
 {
     protected static ?string $model = QuestionCategory::class;
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 11;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

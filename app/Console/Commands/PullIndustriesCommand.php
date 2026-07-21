@@ -18,7 +18,7 @@ class PullIndustriesCommand extends Command
             ->withHeaders([
                 'access-token' => trim(env('ACCESS_TOKEN')),
             ])
-            ->get(env('API_BASE_URL').'/industry-list');
+            ->get(env('API_BASE_URL').'/support/industry-list');
 
         if (! $response->successful()) {
             $this->error('Failed to fetch industries.');
