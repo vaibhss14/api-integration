@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Jobs\PullBusinessVerticalsJob;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class PullBusinessVerticalsCommand extends Command
 {

@@ -40,7 +40,7 @@ class PullSurveysJob implements ShouldQueue
                 ])
                 ->get(
                     config('services.supplier_api.base_url')
-                    . '/survey/surveys'
+                    .'/survey/surveys'
                 );
 
         } catch (ConnectionException $e) {

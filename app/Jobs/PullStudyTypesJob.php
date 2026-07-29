@@ -31,7 +31,7 @@ class PullStudyTypesJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/support/study-types'
+                .'/support/study-types'
             );
 
         if (! $response->successful()) {
@@ -63,7 +63,7 @@ class PullStudyTypesJob implements ShouldQueue
         }
 
         logger()->info(
-            count($studyTypes) . ' study types synchronized successfully.'
+            count($studyTypes).' study types synchronized successfully.'
         );
     }
 }

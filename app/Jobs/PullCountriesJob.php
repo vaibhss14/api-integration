@@ -16,9 +16,10 @@ class PullCountriesJob implements ShouldQueue
     public int $timeout = 120;
 
     public function backoff(): array
-        {
-            return [60, 300, 600];
-        }
+    {
+        return [60, 300, 600];
+    }
+
     public function handle(): void
     {
         $response = Http::acceptJson()
@@ -28,7 +29,7 @@ class PullCountriesJob implements ShouldQueue
                 'access-token' => config('services.supplier_api.access_token'),
             ])
             ->get(
-                config('services.supplier_api.base_url') . '/support/country-list'
+                config('services.supplier_api.base_url').'/support/country-list'
             );
 
         $countries = $response->json('data');

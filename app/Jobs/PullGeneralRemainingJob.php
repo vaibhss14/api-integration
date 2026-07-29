@@ -39,7 +39,7 @@ class PullGeneralRemainingJob implements ShouldQueue
                     ])
                     ->get(
                         config('services.supplier_api.base_url')
-                        . "/survey/general-reserved-remaining/{$survey->survey_id}"
+                        ."/survey/general-reserved-remaining/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {

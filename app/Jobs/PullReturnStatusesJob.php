@@ -31,7 +31,7 @@ class PullReturnStatusesJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/support/return-status'
+                .'/support/return-status'
             );
 
         if (! $response->successful()) {

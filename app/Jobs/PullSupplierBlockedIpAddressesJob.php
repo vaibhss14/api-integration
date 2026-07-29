@@ -36,7 +36,7 @@ class PullSupplierBlockedIpAddressesJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/supplier/supplier-blocked-ip-address'
+                .'/supplier/supplier-blocked-ip-address'
             );
 
         // Handle "No blocked supplier IP found"
@@ -81,7 +81,7 @@ class PullSupplierBlockedIpAddressesJob implements ShouldQueue
             $processed++;
         }
 
-        logger()->info("Supplier Blocked IP Addresses synchronized successfully.");
+        logger()->info('Supplier Blocked IP Addresses synchronized successfully.');
         logger()->info("Records imported: {$processed}");
     }
 }

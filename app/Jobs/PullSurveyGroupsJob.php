@@ -44,7 +44,7 @@ class PullSurveyGroupsJob implements ShouldQueue
                     ])
                     ->get(
                         config('services.supplier_api.base_url')
-                        . "/survey/survey-groups/{$survey->survey_id}"
+                        ."/survey/survey-groups/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {
@@ -76,9 +76,9 @@ class PullSurveyGroupsJob implements ShouldQueue
 
                         SurveyGroup::updateOrCreate(
                             [
-                                'survey_id'                    => $survey->survey_id,
-                                'survey_group_id'              => $group['surveyGroupId'],
-                                'grouped_survey_id'            => $groupedSurvey,
+                                'survey_id' => $survey->survey_id,
+                                'survey_group_id' => $group['surveyGroupId'],
+                                'grouped_survey_id' => $groupedSurvey,
                                 'return_restriction_status_id' => $statusId,
                             ],
                             [

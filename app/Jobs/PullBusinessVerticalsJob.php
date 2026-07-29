@@ -49,7 +49,7 @@ class PullBusinessVerticalsJob implements ShouldQueue
                 'access-token' => config('services.supplier_api.access_token'),
             ])
             ->get(
-                config('services.supplier_api.base_url') . '/support/business-verticals'
+                config('services.supplier_api.base_url').'/support/business-verticals'
             );
 
         if (! $response->successful()) {

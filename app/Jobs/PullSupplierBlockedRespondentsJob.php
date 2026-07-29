@@ -36,7 +36,7 @@ class PullSupplierBlockedRespondentsJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/supplier/supplier-blocked-respondents'
+                .'/supplier/supplier-blocked-respondents'
             );
 
         // Handle "No blocked supplier respondent found"

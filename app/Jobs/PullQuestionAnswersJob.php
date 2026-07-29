@@ -39,7 +39,7 @@ class PullQuestionAnswersJob implements ShouldQueue
                             ])
                             ->get(
                                 config('services.supplier_api.base_url')
-                                . "/support/question-answers/country/{$country->country_id}"
+                                ."/support/question-answers/country/{$country->country_id}"
                             );
 
                     } catch (ConnectionException $e) {
@@ -68,13 +68,13 @@ class PullQuestionAnswersJob implements ShouldQueue
 
                             QuestionAnswer::updateOrCreate(
                                 [
-                                    'answer_id'   => $answer['AnswerId'],
+                                    'answer_id' => $answer['AnswerId'],
                                     'question_id' => $question['QuestionId'],
                                 ],
                                 [
-                                    'country_id'        => $country->country_id,
+                                    'country_id' => $country->country_id,
                                     'localization_code' => $question['localizationCode'],
-                                    'description'       => $answer['Description'],
+                                    'description' => $answer['Description'],
                                 ]
                             );
                         }

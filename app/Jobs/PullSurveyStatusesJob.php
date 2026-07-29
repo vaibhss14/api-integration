@@ -31,7 +31,7 @@ class PullSurveyStatusesJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/support/survey-status'
+                .'/support/survey-status'
             );
 
         if (! $response->successful()) {
@@ -63,7 +63,7 @@ class PullSurveyStatusesJob implements ShouldQueue
         }
 
         logger()->info(
-            count($surveyStatuses) . ' survey statuses synchronized successfully.'
+            count($surveyStatuses).' survey statuses synchronized successfully.'
         );
     }
 }

@@ -45,7 +45,7 @@ class PullSurveyQualificationsJob implements ShouldQueue
                     ])
                     ->get(
                         config('services.supplier_api.base_url')
-                        . "/survey/survey-Qualifications/{$survey->survey_id}"
+                        ."/survey/survey-Qualifications/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {
@@ -91,9 +91,9 @@ class PullSurveyQualificationsJob implements ShouldQueue
 
                         SurveyQualification::updateOrCreate(
                             [
-                                'survey_id'        => $survey->survey_id,
+                                'survey_id' => $survey->survey_id,
                                 'qualification_id' => $qualification['qualificationId'],
-                                'answer_id'        => trim($id),
+                                'answer_id' => trim($id),
                             ],
                             [
                                 'update_timestamp' => ! empty($qualification['updateTimeStamp'])

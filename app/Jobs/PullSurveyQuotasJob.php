@@ -45,7 +45,7 @@ class PullSurveyQuotasJob implements ShouldQueue
                     ])
                     ->get(
                         config('services.supplier_api.base_url')
-                        . "/survey/survey-quotas/{$survey->survey_id}"
+                        ."/survey/survey-quotas/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {
@@ -77,14 +77,14 @@ class PullSurveyQuotasJob implements ShouldQueue
 
                         SurveyQuota::updateOrCreate(
                             [
-                                'survey_id'        => $survey->survey_id,
-                                'quota_id'         => $quota['quotaId'],
+                                'survey_id' => $survey->survey_id,
+                                'quota_id' => $quota['quotaId'],
                                 'qualification_id' => $criteria['qualificationId'],
-                                'answer_id'        => $answerId,
+                                'answer_id' => $answerId,
                             ],
                             [
-                                'quota_name'       => $quota['quotaName'],
-                                'total_remaining'  => $quota['totalRemaining'],
+                                'quota_name' => $quota['quotaName'],
+                                'total_remaining' => $quota['totalRemaining'],
                                 'update_timestamp' => ! empty($quota['updateTimeStamp'])
                                     ? Carbon::parse($quota['updateTimeStamp'])
                                     : null,

@@ -31,7 +31,7 @@ class PullRedirectTypesJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/support/redirect-types'
+                .'/support/redirect-types'
             );
 
         if (! $response->successful()) {
@@ -63,7 +63,7 @@ class PullRedirectTypesJob implements ShouldQueue
         }
 
         logger()->info(
-            count($redirectTypes) . ' redirect types synchronized successfully.'
+            count($redirectTypes).' redirect types synchronized successfully.'
         );
     }
 }

@@ -45,7 +45,7 @@ class PullSurveyBlockedIpAddressesJob implements ShouldQueue
                     ])
                     ->get(
                         config('services.supplier_api.base_url')
-                        . "/survey/survey-blocked-ip-address/{$survey->survey_id}"
+                        ."/survey/survey-blocked-ip-address/{$survey->survey_id}"
                     );
 
             } catch (ConnectionException $e) {

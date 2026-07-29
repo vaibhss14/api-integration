@@ -46,7 +46,7 @@ class PullQuestionsJob implements ShouldQueue
                             ])
                             ->get(
                                 config('services.supplier_api.base_url')
-                                . "/support/question/{$country->country_id}"
+                                ."/support/question/{$country->country_id}"
                             );
 
                     } catch (ConnectionException $e) {
@@ -121,14 +121,14 @@ class PullQuestionsJob implements ShouldQueue
                     }
 
                     logger()->info(
-                        count($questions) . " questions saved for {$country->country_name}"
+                        count($questions)." questions saved for {$country->country_name}"
                     );
 
                     $processed++;
                 }
             });
 
-        logger()->info("Questions synchronized successfully.");
+        logger()->info('Questions synchronized successfully.');
         logger()->info("Countries processed: {$processed}");
         logger()->info("Countries skipped: {$skipped}");
     }

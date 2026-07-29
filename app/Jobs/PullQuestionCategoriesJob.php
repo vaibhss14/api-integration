@@ -28,7 +28,7 @@ class PullQuestionCategoriesJob implements ShouldQueue
             ])
             ->get(
                 config('services.supplier_api.base_url')
-                . '/support/question-categories'
+                .'/support/question-categories'
             );
 
         if (! $response->successful()) {
