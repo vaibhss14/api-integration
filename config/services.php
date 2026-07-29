@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'supplier_api' => [
+
+        'base_url' => env('API_BASE_URL'),
+
+        'access_token' => env('ACCESS_TOKEN'),
+
+    ],
 ];

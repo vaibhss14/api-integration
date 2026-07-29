@@ -2,51 +2,20 @@
 
 namespace App\Console\Commands;
 
-use App\Models\StudyType;
+use App\Jobs\PullStudyTypesJob;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Http;
 
 class PullStudyTypesCommand extends Command
 {
     protected $signature = 'study-types:pull';
 
-    protected $description = 'Pull study types from API and store them';
+    protected $description = 'Dispatch Study Types synchronization job';
 
     public function handle()
     {
-        $response = Http::acceptJson()
-            ->withHeaders([
-                'access-token' => trim(env('ACCESS_TOKEN')),
-            ])
-            ->get(env('API_BASE_URL').'/support/study-types');
+        PullStudyTypesJob::dispatch();
 
-        if (! $response->successful()) {
-            $this->error('Failed to fetch study types.');
-
-            return Command::FAILURE;
-        }
-
-        $studyTypes = $response->json('data');
-
-        if (empty($studyTypes)) {
-            $this->error('No study types found.');
-
-            return Command::FAILURE;
-        }
-
-        foreach ($studyTypes as $studyType) {
-
-            StudyType::updateOrCreate(
-                [
-                    'study_type_id' => $studyType['StudyTypeId'],
-                ],
-                [
-                    'study_name' => trim($studyType['StudyName']),
-                ]
-            );
-        }
-
-        $this->info(count($studyTypes).' study types imported successfully.');
+        $this->info('Study Types synchronization job dispatched.');
 
         return Command::SUCCESS;
     }

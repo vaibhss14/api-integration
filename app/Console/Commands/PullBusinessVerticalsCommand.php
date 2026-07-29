@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\BusinessVertical;
+use App\Jobs\PullBusinessVerticalsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
 
@@ -14,39 +14,9 @@ class PullBusinessVerticalsCommand extends Command
 
     public function handle()
     {
-        $response = Http::acceptJson()
-            ->withHeaders([
-                'access-token' => trim(env('ACCESS_TOKEN')),
-            ])
-            ->get(env('API_BASE_URL').'/support/business-verticals');
+        PullBusinessVerticalsJob::dispatch();
 
-        if (! $response->successful()) {
-            $this->error('Failed to fetch business verticals.');
-
-            return Command::FAILURE;
-        }
-
-        $businessVerticals = $response->json('data');
-
-        if (empty($businessVerticals)) {
-            $this->error('No business verticals found.');
-
-            return Command::FAILURE;
-        }
-
-        foreach ($businessVerticals as $businessVertical) {
-
-            BusinessVertical::updateOrCreate(
-                [
-                    'business_vertical_id' => $businessVertical['BusinessVerticalId'],
-                ],
-                [
-                    'description' => trim($businessVertical['Description']),
-                ]
-            );
-        }
-
-        $this->info(count($businessVerticals).' business verticals imported successfully.');
+        $this->info('Business verticals job dispatched.');
 
         return Command::SUCCESS;
     }
