@@ -55,7 +55,7 @@ class PullQuestionsJob implements ShouldQueue
                             ])
                             ->get(
                                 config('services.supplier_api.base_url')
-                                ."/support/question/{$country->country_id}/garbage"
+                                ."/support/question/{$country->country_id}"
                             );
 
                         $response->throw();
