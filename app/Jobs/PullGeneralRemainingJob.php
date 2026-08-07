@@ -39,11 +39,11 @@ class PullGeneralRemainingJob implements ShouldQueue
 
             try {
 
-            logger()->info('General Remaining synchronization started.');
+                logger()->info('General Remaining synchronization started.');
 
                 $response = Http::acceptJson()
-                    //->timeout(120)
-                    //->retry(3, 3000, throw: false)
+                    // ->timeout(120)
+                    // ->retry(3, 3000, throw: false)
                     ->withHeaders([
                         'access-token' => config('services.supplier_api.access_token'),
                     ])
@@ -70,17 +70,17 @@ class PullGeneralRemainingJob implements ShouldQueue
                 continue;
             }
 
-           // if (
-             //   ! $response->successful() ||
-               // ! $response->json('result.Success')
-            //) {
+            // if (
+            //   ! $response->successful() ||
+            // ! $response->json('result.Success')
+            // ) {
 
             //    logger()->warning(
-                //    "Skipped Survey {$survey->survey_id}"
-             //   );
+            //    "Skipped Survey {$survey->survey_id}"
+            //   );
 
-              //  continue;
-           // }
+            //  continue;
+            // }
 
             $remaining = $response->json('totalRemainaing');
 

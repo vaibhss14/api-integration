@@ -30,6 +30,7 @@ class PullSurveyBlockedIpAddressesJob implements ShouldQueue
             'exception' => $exception->getMessage(),
         ]);
     }
+
     /**
      * Execute the job.
      */
@@ -44,11 +45,11 @@ class PullSurveyBlockedIpAddressesJob implements ShouldQueue
 
             try {
 
-            logger()->info("Fetching blocked IPs for Survey {$survey->survey_id}");
-            
+                logger()->info("Fetching blocked IPs for Survey {$survey->survey_id}");
+
                 $response = Http::acceptJson()
-                    //->timeout(120)
-                    //->retry(3, 3000, throw: false)
+                    // ->timeout(120)
+                    // ->retry(3, 3000, throw: false)
                     ->withHeaders([
                         'access-token' => config('services.supplier_api.access_token'),
                     ])

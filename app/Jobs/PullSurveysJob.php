@@ -29,6 +29,7 @@ class PullSurveysJob implements ShouldQueue
             'exception' => $exception->getMessage(),
         ]);
     }
+
     /**
      * Execute the job.
      */
@@ -42,8 +43,8 @@ class PullSurveysJob implements ShouldQueue
         try {
 
             $response = Http::acceptJson()
-                //->timeout(120)
-                //->retry(3, 3000, throw: false)
+                // ->timeout(120)
+                // ->retry(3, 3000, throw: false)
                 ->withHeaders([
                     'access-token' => config('services.supplier_api.access_token'),
                 ])
@@ -71,7 +72,6 @@ class PullSurveysJob implements ShouldQueue
 
             return;
         }
-
 
         $surveys = $response->json('surveys');
 

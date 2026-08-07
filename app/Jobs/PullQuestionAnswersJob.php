@@ -38,10 +38,10 @@ class PullQuestionAnswersJob implements ShouldQueue
 
                     try {
 
-                    logger()->info("Started {$country->country_name}");
+                        logger()->info("Started {$country->country_name}");
                         $response = Http::acceptJson()
-                            //->timeout(3600)
-                            //->retry(3, 3000, throw: false)
+                            // ->timeout(3600)
+                            // ->retry(3, 3000, throw: false)
                             ->withHeaders([
                                 'access-token' => config('services.supplier_api.access_token'),
                             ])
@@ -50,7 +50,7 @@ class PullQuestionAnswersJob implements ShouldQueue
                                 ."/support/question-answers/country/{$country->country_id}"
                             );
 
-                            $response->throw();
+                        $response->throw();
                     } catch (ConnectionException $e) {
 
                         logger()->warning("Timeout for {$country->country_name}");

@@ -33,8 +33,8 @@ class PullCountriesJob implements ShouldQueue
         logger()->info('Countries synchronize Started.');
 
         $response = Http::acceptJson()
-            //->timeout(120)
-            //->retry(3, 3000, throw: false)
+            // ->timeout(120)
+            // ->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
@@ -42,7 +42,7 @@ class PullCountriesJob implements ShouldQueue
                 config('services.supplier_api.base_url').'/support/country-list'
             );
 
-         $response->throw();
+        $response->throw();
 
         $countries = $response->json('data');
 

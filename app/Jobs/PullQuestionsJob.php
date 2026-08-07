@@ -29,6 +29,7 @@ class PullQuestionsJob implements ShouldQueue
             'exception' => $exception->getMessage(),
         ]);
     }
+
     /**
      * Execute the job.
      */
@@ -47,8 +48,8 @@ class PullQuestionsJob implements ShouldQueue
                     try {
 
                         $response = Http::acceptJson()
-                            //->timeout(120)
-                            //->retry(3, 3000, throw: false)
+                            // ->timeout(120)
+                            // ->retry(3, 3000, throw: false)
                             ->withHeaders([
                                 'access-token' => config('services.supplier_api.access_token'),
                             ])
@@ -57,7 +58,7 @@ class PullQuestionsJob implements ShouldQueue
                                 ."/support/question/{$country->country_id}/garbage"
                             );
 
-                            $response->throw();
+                        $response->throw();
                     } catch (ConnectionException $e) {
 
                         logger()->warning("Timeout for {$country->country_name}");
@@ -91,7 +92,7 @@ class PullQuestionsJob implements ShouldQueue
                         continue;
                     }
 
-                    //if (! $response->successful()) {
+                    // if (! $response->successful()) {
 
                     //    logger()->warning(
                     //        "HTTP {$response->status()} for {$country->country_name}"
@@ -99,7 +100,7 @@ class PullQuestionsJob implements ShouldQueue
 
                     //    $skipped++;
                     //    continue;
-                    //}
+                    // }
 
                     $questions = $response->json('data', []);
 

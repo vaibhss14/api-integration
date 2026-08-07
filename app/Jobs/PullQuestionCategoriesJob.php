@@ -30,7 +30,7 @@ class PullQuestionCategoriesJob implements ShouldQueue
 
     public function handle(): void
     {
-        logger ()->info('Question categories synchronize Started.');
+        logger()->info('Question categories synchronize Started.');
 
         $response = Http::acceptJson()
             ->withHeaders([
@@ -42,11 +42,11 @@ class PullQuestionCategoriesJob implements ShouldQueue
             );
 
         $response->throw();
-        //if (! $response->successful()) {
+        // if (! $response->successful()) {
         //    logger()->error('Failed to fetch question categories.');
 
         //    return;
-        //}
+        // }
 
         $questionCategories = $response->json('data');
 

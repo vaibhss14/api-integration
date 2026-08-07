@@ -26,6 +26,7 @@ class PullQuestionTypesJob implements ShouldQueue
             'exception' => $exception->getMessage(),
         ]);
     }
+
     /**
      * Execute the job.
      */
@@ -43,11 +44,11 @@ class PullQuestionTypesJob implements ShouldQueue
 
         $response->throw();
 
-        //if (! $response->successful()) {
+        // if (! $response->successful()) {
 
-          ///  logger()->error('Failed to fetch question types.');
+        // /  logger()->error('Failed to fetch question types.');
 
-            //return;
+        // return;
         // }
 
         $questionTypes = $response->json('data');

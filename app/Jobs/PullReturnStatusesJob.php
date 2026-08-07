@@ -6,7 +6,7 @@ use App\Models\ReturnStatus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
-use Throwable;  
+use Throwable;
 
 class PullReturnStatusesJob implements ShouldQueue
 {
@@ -27,6 +27,7 @@ class PullReturnStatusesJob implements ShouldQueue
             'exception' => $exception->getMessage(),
         ]);
     }
+
     /**
      * Execute the job.
      */

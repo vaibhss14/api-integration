@@ -26,6 +26,7 @@ class PullRedirectTypesJob implements ShouldQueue
             'exception' => $exception->getMessage(),
         ]);
     }
+
     /**
      * Execute the job.
      */
@@ -44,11 +45,11 @@ class PullRedirectTypesJob implements ShouldQueue
 
         $response->throw();
 
-        //if (! $response->successful()) {
+        // if (! $response->successful()) {
 
         //    logger()->error('Failed to fetch redirect types.');
         //    return;
-        //}
+        // }
 
         $redirectTypes = $response->json('data');
 

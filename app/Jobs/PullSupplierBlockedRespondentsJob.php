@@ -39,15 +39,15 @@ class PullSupplierBlockedRespondentsJob implements ShouldQueue
         $processed = 0;
 
         $response = Http::acceptJson()
-            //->timeout(120)
-            //->retry(3, 3000, throw: false)
+            // ->timeout(120)
+            // ->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
             ->get(
-                config('services.supplier_api.base_url') .'/supplier/supplier-blocked-respondents'
+                config('services.supplier_api.base_url').'/supplier/supplier-blocked-respondents'
             );
-            
+
         // Handle "No blocked supplier respondent found"
         if (
             $response->status() === 404 &&
@@ -63,7 +63,7 @@ class PullSupplierBlockedRespondentsJob implements ShouldQueue
         }
 
         $response->throw();
-        
+
         if (
             ! $response->successful() ||
             ! $response->json('result.Success')

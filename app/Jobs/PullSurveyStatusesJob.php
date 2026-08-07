@@ -44,7 +44,7 @@ class PullSurveyStatusesJob implements ShouldQueue
                 .'/support/survey-status'
             );
 
-            $response->throw();
+        $response->throw();
         // if (! $response->successful()) {
 
         //     logger()->error('Failed to fetch survey statuses.');

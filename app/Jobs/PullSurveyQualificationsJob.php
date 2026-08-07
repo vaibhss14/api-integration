@@ -48,8 +48,8 @@ class PullSurveyQualificationsJob implements ShouldQueue
             try {
 
                 $response = Http::acceptJson()
-                    //->timeout(120)
-                    //->retry(3, 3000, throw: false)
+                    // ->timeout(120)
+                    // ->retry(3, 3000, throw: false)
                     ->withHeaders([
                         'access-token' => config('services.supplier_api.access_token'),
                     ])
@@ -67,8 +67,8 @@ class PullSurveyQualificationsJob implements ShouldQueue
                 continue;
             }
 
-        $response->throw();
-        
+            $response->throw();
+
             if (
                 ! $response->successful() ||
                 ! $response->json('result.Success')

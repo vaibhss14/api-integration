@@ -53,8 +53,8 @@ class PullBusinessVerticalsJob implements ShouldQueue
         logger()->info('Business verticals synchronize Started.');
 
         $response = Http::acceptJson()
-            //->timeout(120)
-            //->retry(3, 3000, throw: false)
+            // ->timeout(120)
+            // ->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
@@ -64,8 +64,7 @@ class PullBusinessVerticalsJob implements ShouldQueue
 
         $response->throw();
 
-
-        //if (! $response->successful()) {
+        // if (! $response->successful()) {
         //     logger()->error('Failed to fetch business verticals.');
 
         //     return;

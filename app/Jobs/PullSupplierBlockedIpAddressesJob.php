@@ -39,8 +39,8 @@ class PullSupplierBlockedIpAddressesJob implements ShouldQueue
         logger()->info('Supplier Blocked IP Addresses synchronize Started.');
 
         $response = Http::acceptJson()
-            //->timeout(120)
-            //->retry(3, 3000, throw: false)
+            // ->timeout(120)
+            // ->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
