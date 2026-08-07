@@ -17,14 +17,21 @@ class PullQuestionTypesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
     }
 
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch question types.', [
+            'exception' => $exception->getMessage(),
+        ]);
+    }
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        logger()->info('Question Types synchronize Started.');
         $response = Http::acceptJson()
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
@@ -34,12 +41,14 @@ class PullQuestionTypesJob implements ShouldQueue
                 .'/support/question-types'
             );
 
-        if (! $response->successful()) {
+        $response->throw();
 
-            logger()->error('Failed to fetch question types.');
+        //if (! $response->successful()) {
 
-            return;
-        }
+          ///  logger()->error('Failed to fetch question types.');
+
+            //return;
+        // }
 
         $questionTypes = $response->json('data');
 

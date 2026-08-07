@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullSupplierBlockedRespondentsJob implements ShouldQueue
 {
@@ -18,7 +19,14 @@ class PullSupplierBlockedRespondentsJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch supplier blocked respondents.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
@@ -26,19 +34,20 @@ class PullSupplierBlockedRespondentsJob implements ShouldQueue
      */
     public function handle(): void
     {
+        logger()->info('Supplier Blocked Respondents synchronize Started.');
+
         $processed = 0;
 
         $response = Http::acceptJson()
-            ->timeout(120)
-            ->retry(3, 3000, throw: false)
+            //->timeout(120)
+            //->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
             ->get(
-                config('services.supplier_api.base_url')
-                .'/supplier/supplier-blocked-respondents'
+                config('services.supplier_api.base_url') .'/supplier/supplier-blocked-respondents'
             );
-
+            
         // Handle "No blocked supplier respondent found"
         if (
             $response->status() === 404 &&
@@ -53,6 +62,8 @@ class PullSupplierBlockedRespondentsJob implements ShouldQueue
             return;
         }
 
+        $response->throw();
+        
         if (
             ! $response->successful() ||
             ! $response->json('result.Success')

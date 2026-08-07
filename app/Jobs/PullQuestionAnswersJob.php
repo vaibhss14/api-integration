@@ -19,7 +19,14 @@ class PullQuestionAnswersJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch question answers.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     public function handle(): void
@@ -31,9 +38,10 @@ class PullQuestionAnswersJob implements ShouldQueue
 
                     try {
 
+                    logger()->info("Started {$country->country_name}");
                         $response = Http::acceptJson()
-                            ->timeout(3600)
-                            ->retry(3, 3000, throw: false)
+                            //->timeout(3600)
+                            //->retry(3, 3000, throw: false)
                             ->withHeaders([
                                 'access-token' => config('services.supplier_api.access_token'),
                             ])
@@ -42,6 +50,7 @@ class PullQuestionAnswersJob implements ShouldQueue
                                 ."/support/question-answers/country/{$country->country_id}"
                             );
 
+                            $response->throw();
                     } catch (ConnectionException $e) {
 
                         logger()->warning("Timeout for {$country->country_name}");

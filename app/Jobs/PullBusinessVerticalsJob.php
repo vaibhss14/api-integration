@@ -6,6 +6,7 @@ use App\Models\BusinessVertical;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullBusinessVerticalsJob implements ShouldQueue
 {
@@ -26,7 +27,14 @@ class PullBusinessVerticalsJob implements ShouldQueue
      */
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch business verticals.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
@@ -42,9 +50,11 @@ class PullBusinessVerticalsJob implements ShouldQueue
      */
     public function handle(): void
     {
+        logger()->info('Business verticals synchronize Started.');
+
         $response = Http::acceptJson()
-            ->timeout(120)
-            ->retry(3, 3000, throw: false)
+            //->timeout(120)
+            //->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
@@ -52,11 +62,14 @@ class PullBusinessVerticalsJob implements ShouldQueue
                 config('services.supplier_api.base_url').'/support/business-verticals'
             );
 
-        if (! $response->successful()) {
-            logger()->error('Failed to fetch business verticals.');
+        $response->throw();
 
-            return;
-        }
+
+        //if (! $response->successful()) {
+        //     logger()->error('Failed to fetch business verticals.');
+
+        //     return;
+        // }
 
         $businessVerticals = $response->json('data');
 
@@ -78,6 +91,6 @@ class PullBusinessVerticalsJob implements ShouldQueue
             );
         }
 
-        logger()->info('Business verticals synchronized successfully.');
+        logger()->info('Business verticals synchronized completed successfully.');
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Industry;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullIndustriesJob implements ShouldQueue
 {
@@ -17,7 +18,7 @@ class PullIndustriesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
     }
 
     /**
@@ -33,9 +34,11 @@ class PullIndustriesJob implements ShouldQueue
      */
     public function handle(): void
     {
+        logger()->info('Industries synchronize Started.');
+
         $response = Http::acceptJson()
-            ->timeout(120)
-            ->retry(3, 3000, throw: false)
+            //->timeout(120)
+            //->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
@@ -43,11 +46,12 @@ class PullIndustriesJob implements ShouldQueue
                 config('services.supplier_api.base_url').'/support/industry-list'
             );
 
-        if (! $response->successful()) {
-            logger()->error('Failed to fetch industries.');
+        $response->throw();
+       // if (! $response->successful()) {
+       //     logger()->error('Failed to fetch industries.');
 
-            return;
-        }
+       //     return;
+       // }
 
         $industries = $response->json('data');
 
@@ -68,5 +72,6 @@ class PullIndustriesJob implements ShouldQueue
                 ]
             );
         }
+        logger ()->info('Industries synchronize completed successfully.');
     }
 }

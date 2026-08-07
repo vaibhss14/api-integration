@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullSurveyQualificationsJob implements ShouldQueue
 {
@@ -20,7 +21,14 @@ class PullSurveyQualificationsJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch survey qualifications.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
@@ -28,6 +36,8 @@ class PullSurveyQualificationsJob implements ShouldQueue
      */
     public function handle(): void
     {
+        logger()->info('Survey Qualifications synchronize Started.');
+
         $processed = 0;
         $skipped = 0;
 
@@ -38,8 +48,8 @@ class PullSurveyQualificationsJob implements ShouldQueue
             try {
 
                 $response = Http::acceptJson()
-                    ->timeout(120)
-                    ->retry(3, 3000, throw: false)
+                    //->timeout(120)
+                    //->retry(3, 3000, throw: false)
                     ->withHeaders([
                         'access-token' => config('services.supplier_api.access_token'),
                     ])
@@ -57,6 +67,8 @@ class PullSurveyQualificationsJob implements ShouldQueue
                 continue;
             }
 
+        $response->throw();
+        
             if (
                 ! $response->successful() ||
                 ! $response->json('result.Success')

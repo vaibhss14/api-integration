@@ -6,6 +6,7 @@ use App\Models\QuestionCategory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullQuestionCategoriesJob implements ShouldQueue
 {
@@ -17,11 +18,20 @@ class PullQuestionCategoriesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch question categories.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     public function handle(): void
     {
+        logger ()->info('Question categories synchronize Started.');
+
         $response = Http::acceptJson()
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
@@ -31,11 +41,12 @@ class PullQuestionCategoriesJob implements ShouldQueue
                 .'/support/question-categories'
             );
 
-        if (! $response->successful()) {
-            logger()->error('Failed to fetch question categories.');
+        $response->throw();
+        //if (! $response->successful()) {
+        //    logger()->error('Failed to fetch question categories.');
 
-            return;
-        }
+        //    return;
+        //}
 
         $questionCategories = $response->json('data');
 

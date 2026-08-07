@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullGeneralRemainingJob implements ShouldQueue
 {
@@ -20,7 +21,14 @@ class PullGeneralRemainingJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch general remaining data.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     public function handle(): void
@@ -31,9 +39,11 @@ class PullGeneralRemainingJob implements ShouldQueue
 
             try {
 
+            logger()->info('General Remaining synchronization started.');
+
                 $response = Http::acceptJson()
-                    ->timeout(120)
-                    ->retry(3, 3000, throw: false)
+                    //->timeout(120)
+                    //->retry(3, 3000, throw: false)
                     ->withHeaders([
                         'access-token' => config('services.supplier_api.access_token'),
                     ])
@@ -41,6 +51,8 @@ class PullGeneralRemainingJob implements ShouldQueue
                         config('services.supplier_api.base_url')
                         ."/survey/general-reserved-remaining/{$survey->survey_id}"
                     );
+
+                $response->throw();
 
             } catch (ConnectionException $e) {
 
@@ -58,17 +70,17 @@ class PullGeneralRemainingJob implements ShouldQueue
                 continue;
             }
 
-            if (
-                ! $response->successful() ||
-                ! $response->json('result.Success')
-            ) {
+           // if (
+             //   ! $response->successful() ||
+               // ! $response->json('result.Success')
+            //) {
 
-                logger()->warning(
-                    "Skipped Survey {$survey->survey_id}"
-                );
+            //    logger()->warning(
+                //    "Skipped Survey {$survey->survey_id}"
+             //   );
 
-                continue;
-            }
+              //  continue;
+           // }
 
             $remaining = $response->json('totalRemainaing');
 

@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullSurveyQuotasJob implements ShouldQueue
 {
@@ -20,85 +21,107 @@ class PullSurveyQuotasJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch survey quotas.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
      * Execute the job.
      */
     public function handle(): void
-    {
-        $processed = 0;
-        $skipped = 0;
+{
+    logger()->info('Survey Quotas synchronize Started.');
 
-        $surveys = Survey::all();
+    $processed = 0;
+    $skipped = 0;
 
-        foreach ($surveys as $survey) {
+    $surveys = Survey::all();
 
-            try {
+    foreach ($surveys as $survey) {
 
-                $response = Http::acceptJson()
-                    ->timeout(120)
-                    ->retry(3, 3000, throw: false)
-                    ->withHeaders([
-                        'access-token' => config('services.supplier_api.access_token'),
-                    ])
-                    ->get(
-                        config('services.supplier_api.base_url')
-                        ."/survey/survey-quotas/{$survey->survey_id}"
-                    );
+        try {
 
-            } catch (ConnectionException $e) {
+            $response = Http::acceptJson()
+                ->withHeaders([
+                    'access-token' => config('services.supplier_api.access_token'),
+                ])
+                ->get(
+                    config('services.supplier_api.base_url')
+                    . "/survey/survey-quotas/{$survey->survey_id}"
+                );
 
-                logger()->warning("Timeout Survey {$survey->survey_id}");
+        } catch (ConnectionException $e) {
 
-                $skipped++;
+            logger()->warning("Timeout Survey {$survey->survey_id}");
 
-                continue;
-            }
+            $skipped++;
 
-            if (
-                ! $response->successful() ||
-                ! $response->json('result.Success')
-            ) {
-
-                logger()->warning("Skipped Survey {$survey->survey_id}");
-
-                $skipped++;
-
-                continue;
-            }
-
-            foreach ($response->json('surveyQuotas', []) as $quota) {
-
-                foreach ($quota['criteria'] ?? [] as $criteria) {
-
-                    foreach ($criteria['answerIds'] ?? [] as $answerId) {
-
-                        SurveyQuota::updateOrCreate(
-                            [
-                                'survey_id' => $survey->survey_id,
-                                'quota_id' => $quota['quotaId'],
-                                'qualification_id' => $criteria['qualificationId'],
-                                'answer_id' => $answerId,
-                            ],
-                            [
-                                'quota_name' => $quota['quotaName'],
-                                'total_remaining' => $quota['totalRemaining'],
-                                'update_timestamp' => ! empty($quota['updateTimeStamp'])
-                                    ? Carbon::parse($quota['updateTimeStamp'])
-                                    : null,
-                            ]
-                        );
-                    }
-                }
-            }
-
-            $processed++;
+            continue;
         }
 
-        logger()->info('Survey Quotas synchronized successfully.');
-        logger()->info("Surveys processed: {$processed}");
-        logger()->info("Surveys skipped: {$skipped}");
+        // Handle "No survey quotas found"
+        if (
+            $response->status() === 404 &&
+            str_contains(
+                $response->json('result.Message', ''),
+                'No survey quotas found'
+            )
+        ) {
+            logger()->warning("No survey quotas found for Survey {$survey->survey_id}");
+
+            $skipped++;
+
+            continue;
+        }
+
+        // Throw only for unexpected HTTP errors
+        $response->throw();
+
+        if (! $response->json('result.Success')) {
+
+            logger()->warning("Skipped Survey {$survey->survey_id}");
+
+            $skipped++;
+
+            continue;
+        }
+
+        foreach ($response->json('surveyQuotas', []) as $quota) {
+
+            foreach ($quota['criteria'] ?? [] as $criteria) {
+
+                foreach ($criteria['answerIds'] ?? [] as $answerId) {
+
+                    SurveyQuota::updateOrCreate(
+                        [
+                            'survey_id' => $survey->survey_id,
+                            'quota_id' => $quota['quotaId'],
+                            'qualification_id' => $criteria['qualificationId'],
+                            'answer_id' => $answerId,
+                        ],
+                        [
+                            'quota_name' => $quota['quotaName'],
+                            'total_remaining' => $quota['totalRemaining'],
+                            'update_timestamp' => ! empty($quota['updateTimeStamp'])
+                                ? Carbon::parse($quota['updateTimeStamp'])
+                                : null,
+                        ]
+                    );
+                }
+            }
+        }
+
+        $processed++;
     }
+
+    logger()->info('Survey Quotas synchronized successfully.');
+    logger()->info("Surveys processed: {$processed}");
+    logger()->info("Surveys skipped: {$skipped}");
+}
 }

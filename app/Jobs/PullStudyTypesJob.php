@@ -6,6 +6,7 @@ use App\Models\StudyType;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullStudyTypesJob implements ShouldQueue
 {
@@ -17,7 +18,14 @@ class PullStudyTypesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch study types.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
@@ -25,6 +33,7 @@ class PullStudyTypesJob implements ShouldQueue
      */
     public function handle(): void
     {
+        logger()->info('Study types synchronize Started.');
         $response = Http::acceptJson()
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
@@ -34,12 +43,13 @@ class PullStudyTypesJob implements ShouldQueue
                 .'/support/study-types'
             );
 
-        if (! $response->successful()) {
+        $response->throw();
+        // if (! $response->successful()) {
 
-            logger()->error('Failed to fetch study types.');
+        //     logger()->error('Failed to fetch study types.');
 
-            return;
-        }
+        //     return;
+        // }
 
         $studyTypes = $response->json('data');
 

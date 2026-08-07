@@ -6,6 +6,7 @@ use App\Models\ReturnStatus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;  
 
 class PullReturnStatusesJob implements ShouldQueue
 {
@@ -17,14 +18,22 @@ class PullReturnStatusesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
     }
 
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch return statuses.', [
+            'exception' => $exception->getMessage(),
+        ]);
+    }
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        logger()->info('Return statuses synchronize Started.');
+
         $response = Http::acceptJson()
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
@@ -34,12 +43,13 @@ class PullReturnStatusesJob implements ShouldQueue
                 .'/support/return-status'
             );
 
-        if (! $response->successful()) {
+        $response->throw();
+        // if (! $response->successful()) {
 
-            logger()->error('Failed to fetch return statuses.');
+        //     logger()->error('Failed to fetch return statuses.');
 
-            return;
-        }
+        //     return;
+        // }
 
         $returnStatuses = $response->json('data');
 

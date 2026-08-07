@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullSupplierBlockedIpAddressesJob implements ShouldQueue
 {
@@ -18,7 +19,14 @@ class PullSupplierBlockedIpAddressesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch supplier blocked IPs.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
@@ -28,9 +36,11 @@ class PullSupplierBlockedIpAddressesJob implements ShouldQueue
     {
         $processed = 0;
 
+        logger()->info('Supplier Blocked IP Addresses synchronize Started.');
+
         $response = Http::acceptJson()
-            ->timeout(120)
-            ->retry(3, 3000, throw: false)
+            //->timeout(120)
+            //->retry(3, 3000, throw: false)
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
             ])
@@ -52,6 +62,8 @@ class PullSupplierBlockedIpAddressesJob implements ShouldQueue
 
             return;
         }
+
+        $response->throw();
 
         if (
             ! $response->successful() ||

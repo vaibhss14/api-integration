@@ -20,14 +20,22 @@ class PullQuestionsJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
     }
 
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch questions.', [
+            'exception' => $exception->getMessage(),
+        ]);
+    }
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        logger()->info('Questions synchronize Started.');
+
         $processed = 0;
         $skipped = 0;
 
@@ -39,16 +47,17 @@ class PullQuestionsJob implements ShouldQueue
                     try {
 
                         $response = Http::acceptJson()
-                            ->timeout(120)
-                            ->retry(3, 3000, throw: false)
+                            //->timeout(120)
+                            //->retry(3, 3000, throw: false)
                             ->withHeaders([
                                 'access-token' => config('services.supplier_api.access_token'),
                             ])
                             ->get(
                                 config('services.supplier_api.base_url')
-                                ."/support/question/{$country->country_id}"
+                                ."/support/question/{$country->country_id}/garbage"
                             );
 
+                            $response->throw();
                     } catch (ConnectionException $e) {
 
                         logger()->warning("Timeout for {$country->country_name}");
@@ -82,16 +91,15 @@ class PullQuestionsJob implements ShouldQueue
                         continue;
                     }
 
-                    if (! $response->successful()) {
+                    //if (! $response->successful()) {
 
-                        logger()->warning(
-                            "HTTP {$response->status()} for {$country->country_name}"
-                        );
+                    //    logger()->warning(
+                    //        "HTTP {$response->status()} for {$country->country_name}"
+                    //    );
 
-                        $skipped++;
-
-                        continue;
-                    }
+                    //    $skipped++;
+                    //    continue;
+                    //}
 
                     $questions = $response->json('data', []);
 

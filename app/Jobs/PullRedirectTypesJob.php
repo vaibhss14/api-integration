@@ -17,14 +17,22 @@ class PullRedirectTypesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
     }
 
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch redirect types.', [
+            'exception' => $exception->getMessage(),
+        ]);
+    }
     /**
      * Execute the job.
      */
     public function handle(): void
     {
+        logger()->info('Redirect types synchronize Started.');
+
         $response = Http::acceptJson()
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
@@ -34,12 +42,13 @@ class PullRedirectTypesJob implements ShouldQueue
                 .'/support/redirect-types'
             );
 
-        if (! $response->successful()) {
+        $response->throw();
 
-            logger()->error('Failed to fetch redirect types.');
+        //if (! $response->successful()) {
 
-            return;
-        }
+        //    logger()->error('Failed to fetch redirect types.');
+        //    return;
+        //}
 
         $redirectTypes = $response->json('data');
 

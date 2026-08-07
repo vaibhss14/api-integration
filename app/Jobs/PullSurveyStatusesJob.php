@@ -6,6 +6,7 @@ use App\Models\SurveyStatus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class PullSurveyStatusesJob implements ShouldQueue
 {
@@ -17,7 +18,14 @@ class PullSurveyStatusesJob implements ShouldQueue
 
     public function backoff(): array
     {
-        return [60, 300, 600];
+        return [10, 20, 30];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        logger()->error('Failed to fetch survey statuses.', [
+            'exception' => $exception->getMessage(),
+        ]);
     }
 
     /**
@@ -25,6 +33,8 @@ class PullSurveyStatusesJob implements ShouldQueue
      */
     public function handle(): void
     {
+        logger()->info('Survey statuses synchronize Started.');
+
         $response = Http::acceptJson()
             ->withHeaders([
                 'access-token' => config('services.supplier_api.access_token'),
@@ -34,12 +44,13 @@ class PullSurveyStatusesJob implements ShouldQueue
                 .'/support/survey-status'
             );
 
-        if (! $response->successful()) {
+            $response->throw();
+        // if (! $response->successful()) {
 
-            logger()->error('Failed to fetch survey statuses.');
+        //     logger()->error('Failed to fetch survey statuses.');
 
-            return;
-        }
+        //     return;
+        // }
 
         $surveyStatuses = $response->json('data');
 
